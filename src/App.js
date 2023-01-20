@@ -11,8 +11,10 @@ function App() {
 
   const [dataArray, setDataArray] = useState([]);
   const [search, setSearch] = useState('');
+  const [filteredMonster, setNow] = useState(dataArray);
+  
 useEffect(() => {
-fetch('https://jsonplaceholder.typicode.com/users').then (data => {return data.json()
+fetch('https://jsonplaceholder.typcode.com/users').then (data => {return data.json()
 }).then(result => {
   console.log(result)
   setDataArray(result)
@@ -20,15 +22,28 @@ fetch('https://jsonplaceholder.typicode.com/users').then (data => {return data.j
 }, [])
 
 const handleText = (e) => {
-  setSearch(e.target.value)
+  setSearch(e.target.value.toLowerCase());
 }
 
 console.log(search);
+
+useEffect(()=> {
+  let filtered = dataArray.filter(cur => {
+    return cur.name.toLowerCase().includes(search);
+  })
+  
+    setNow(filtered);
+
+},[search])
+
   return (
-    <div className="App">
+    <div className="App flex flex-col flex-wrap justify-between items-center">
+       <h1 class="text-5xl text-green-600 font-bold italic mb-5 mt-12">MonSTer RoLodEX</h1>
+       
       <Inputb changeText = {handleText} />
-      
-      {dataArray.map((cur, index) => <Card object = {cur} key={index}/>)}
+      <div className='flex flex-wrap items-center justify-center w-screen h-3/4'>
+      {filteredMonster.map((cur, index) => <Card object = {cur} key={index}/>)}
+      </div>
     </div>
   );
 }
